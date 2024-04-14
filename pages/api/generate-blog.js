@@ -17,7 +17,7 @@ const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
 
 
-const mediaPath = path.join(process.cwd(), 'media');
+const mediaPath = path.join(process.cwd(), 'tmp');
 if (!fs.existsSync(mediaPath)) {
     fs.mkdirSync(mediaPath, { recursive: true });
 }
