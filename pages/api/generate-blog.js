@@ -17,10 +17,30 @@ const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
 
 
-const mediaPath = path.join(process.cwd(), 'tmp');
-if (!fs.existsSync(mediaPath)) {
-    fs.mkdirSync(mediaPath, { recursive: true });
-}
+// const mediaPath = path.join(process.cwd(), 'tmp');
+// if (!fs.existsSync(mediaPath)) {
+//     fs.mkdirSync(mediaPath, { recursive: true });
+// }
+
+// async function downloadAudio(link) {
+//     const info = await ytdl.getInfo(link);
+//     const format = ytdl.chooseFormat(info.formats, { quality: 'highestaudio' });
+//     // Save the file in the 'media' directory
+//     const output = path.join(mediaPath, `${info.videoDetails.videoId}.mp3`);
+    
+//     return new Promise((resolve, reject) => {
+//         const stream = ytdl(link, { format })
+//             .pipe(fs.createWriteStream(output));
+
+//         stream.on('finish', () => resolve(output));
+//         stream.on('error', error => {
+//             console.error('Error downloading audio:', error);
+//             reject(error);
+//         });
+//     });
+// }
+
+const mediaPath = '/tmp'; // Use the writable temp directory provided by Vercel
 
 async function downloadAudio(link) {
     const info = await ytdl.getInfo(link);
@@ -32,7 +52,10 @@ async function downloadAudio(link) {
         const stream = ytdl(link, { format })
             .pipe(fs.createWriteStream(output));
 
-        stream.on('finish', () => resolve(output));
+        stream.on('finish', () => {
+            console.log(`Download finished: ${output}`);
+            resolve(output);
+        });
         stream.on('error', error => {
             console.error('Error downloading audio:', error);
             reject(error);
